@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check changed files
+        if: github.repository != 'unnc-aim/aim-2627-cpp-oop-coursework'
+        run: |
+          set -e
+          BASE=$(git rev-list --max-parents=0 HEAD | tail -1)
+          CHANGED=$(git diff --name-only "$BASE" HEAD)
+          echo "$CHANGED"
+          BAD=$(echo "$CHANGED" | grep -v -E '^(\.agent-sessions/bundles/.*|include/.*|src/.*|docs/.*|README\.md)$' | grep -v '^$' || true)
+          if [ -n "$BAD" ]; then
+            echo "::error::只允许修改 include/**、src/**、docs/**、README.md 和 Agent 归档，以下文件不在白名单："
+            echo "$BAD"
+            exit 1
+          fi
+
+      - name: Configure and test
+        run: |
+          cmake -S . -B build
+          cmake --build build --parallel 2
+          ctest --test-dir build -R debug_task --output-on-failure
+          python3 tools/validate_structure.py
+
+      - name: Run public tests when implemented
+        run: |
+          if grep -R "TODO: implement" -n include src; then
+            echo "TODO template detected; public tests are deferred to the private grader."
+          else
+            ctest --test-dir build -R public_tests --output-on-failure
+          fi
+
+      - name: Generate question summary
+        if: always()
+        run: python3 tools/summarize.py
+
+      - name: Publish question summary
+        if: always()
+        run: cat summary.md >> "$GITHUB_STEP_SUMMARY"

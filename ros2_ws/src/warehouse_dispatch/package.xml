@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>warehouse_dispatch</name>
+  <version>1.0.0</version>
+  <description>Software-only warehouse picking robot dispatch demo.</description>
+  <maintainer email="course@example.com">AIM Robotics</maintainer>
+  <license>Proprietary</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

@@ -1,0 +1,10 @@
+build/
+log/
+install/
+.agent-sessions/source/
+.venv-agent-session-commit/
+.DS_Store
+.idea/
+.vscode/
+summary.md
+__pycache__/
