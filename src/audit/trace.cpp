@@ -5,16 +5,16 @@
 namespace audit {
 
 void Trace::append(const std::string& text) {
-    (void)text;
-    throw std::runtime_error("TODO: implement Trace::append");
+    TraceEvent event{text};
+    events_.push_back(event);
 }
 
 std::vector<TraceEvent> Trace::events() const {
-    throw std::runtime_error("TODO: implement Trace::events");
+    return events_;
 }
 
 void Trace::clear() {
-    throw std::runtime_error("TODO: implement Trace::clear");
+    events_.clear();
 }
 
 }  // namespace audit

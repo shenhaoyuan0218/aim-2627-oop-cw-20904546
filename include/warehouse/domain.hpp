@@ -16,6 +16,8 @@ struct Order {
     int quantity;
 };
 
+bool valid_order(const Order& order);
+
 struct PickStation {
     std::string id;
     int stock;
