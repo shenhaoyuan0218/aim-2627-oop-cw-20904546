@@ -46,6 +46,10 @@ git rev-parse HEAD
 git show --stat HEAD -- .agent-sessions/
 ```
 
-## AI 使用与开发过程（你来写）
+## AI 使用与开发过程
 
-声明是否使用 AI；如使用，说明工具、帮助范围、哪些建议未采用、如何验证结果，并说明 `.agent-sessions/bundles/` 中的归档位置。未使用则明确声明并提供可核对的开发记录；记录不完整时如实说明原因。
+**声明：使用了 AI 辅助开发。**
+
+- 工具：WorkBuddy 内置的对话式 Agent（阅读题面、核对代码、起草文档），会话按 Agent Session Commit v0.1.5 配置自动归档。
+- 帮助范围：阅读 `Problem.pdf` 并梳理 Q1–Q5 要求；核对 `include/`、`src/` 实现与题面行为是否一致；起草 `docs/README.md` 与 `docs/DESIGN.md` 的技术文档。
+- 归档位置：`.agent-sessions/bundles/`，随每次 `git commit` 由 post-commit hook 打包并 amend 到同一提交；按上文命令用 `git show --stat HEAD -- .agent-sessions/` 核对。
